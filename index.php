@@ -31,20 +31,11 @@ $resultado = mysqli_query($conexion, "SELECT * FROM productos ORDER BY id ASC");
                 <h4 class="mb-0">Listado de Productos</h4>
             </div>
             <div class="card-body">
-                <?php
-                if(isset($_GET['mensaje'])) {
-                    $msg = $_GET['mensaje'];
-                    echo '<div class="alert alert-success alert-dismissible fade show">
-                            Producto ' . ($msg == 'eliminado' ? 'eliminado' : ($msg == 'actualizado' ? 'actualizado' : 'agregado')) . ' correctamente
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                          </div>';
-                }
-                ?>
                 <div class="table-responsive">
                     <table class="table table-striped table-hover">
                         <thead class="table-dark">
                             <tr>
-                                <th>ID</th>
+                                <th>N°prod</th>
                                 <th>Producto</th>
                                 <th>Categoría</th>
                                 <th>Precio</th>

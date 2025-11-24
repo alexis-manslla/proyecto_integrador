@@ -33,6 +33,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     <nav class="navbar navbar-dark bg-dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="index.php">TechnoMarket</a>
+            <a href="index.php" class="btn btn-outline-light btn-sm">Volver al Inicio</a>
         </div>
     </nav>
 
