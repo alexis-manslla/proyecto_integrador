@@ -1,85 +1,84 @@
 <?php
-// Incluir el archivo de conexión
 include 'conexion.php';
-
-// Consultar todos los productos
-$query = "SELECT * FROM productos ORDER BY id ASC";
-$resultado = mysqli_query($conexion, $query);
+$resultado = mysqli_query($conexion, "SELECT * FROM productos ORDER BY id ASC");
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Productos</title>
-    <link rel="stylesheet" href="style.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>TechnoMarket</h1>
-            <div class="header-buttons">
-                <a href="agregar.php" class="btn btn-agregar">Agregar Producto</a>
-                <a href="disponibles.php" class="btn btn-disponibles">Ver Disponibles</a>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.php">TechnoMarket</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="nav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="btn btn-success" href="agregar_productos.php">Agregar</a></li>
+                </ul>
             </div>
-        </header>
+        </div>
+    </nav>
 
-        <div class="content">
-            <?php
-            // Mostrar mensajes de éxito o error
-            if(isset($_GET['mensaje'])) {
-                if($_GET['mensaje'] == 'eliminado') {
-                    echo '<div class="mensaje mensaje-exito">Producto eliminado correctamente</div>';
-                } elseif($_GET['mensaje'] == 'actualizado') {
-                    echo '<div class="mensaje mensaje-exito">Producto actualizado correctamente</div>';
-                } elseif($_GET['mensaje'] == 'agregado') {
-                    echo '<div class="mensaje mensaje-exito">Producto agregado correctamente</div>';
+    <div class="container mt-4">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">Listado de Productos</h4>
+            </div>
+            <div class="card-body">
+                <?php
+                if(isset($_GET['mensaje'])) {
+                    $msg = $_GET['mensaje'];
+                    echo '<div class="alert alert-success alert-dismissible fade show">
+                            Producto ' . ($msg == 'eliminado' ? 'eliminado' : ($msg == 'actualizado' ? 'actualizado' : 'agregado')) . ' correctamente
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                          </div>';
                 }
-            }
-            ?>
-
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Producto</th>
-                        <th>Categoría</th>
-                        <th>Precio</th>
-                        <th>Stock</th>
-                        <th>Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php
-                    // Verificar si hay productos
-                    if(mysqli_num_rows($resultado) > 0) {
-                        // Mostrar cada producto
-                        while($producto = mysqli_fetch_assoc($resultado)) {
-                            echo "<tr>";
-                            echo "<td>" . str_pad($producto['id'], 3, '0', STR_PAD_LEFT) . "</td>";
-                            echo "<td>" . htmlspecialchars($producto['nombre']) . "</td>";
-                            echo "<td>" . htmlspecialchars($producto['categoria']) . "</td>";
-                            echo "<td>$" . number_format($producto['precio'], 2) . "</td>";
-                            echo "<td>" . $producto['stock'] . " unidades</td>";
-                            echo "<td class='action-buttons'>";
-                            echo "<a href='modificar.php?id=" . $producto['id'] . "' class='btn-modificar'>Modificar</a>";
-                            echo "<a href='eliminar.php?id=" . $producto['id'] . "' class='btn-eliminar' onclick='return confirm(\"¿Estás seguro de eliminar este producto?\")'>Eliminar</a>";
-                            echo "</td>";
-                            echo "</tr>";
-                        }
-                    } else {
-                        echo "<tr><td colspan='6' style='text-align: center;'>No hay productos registrados</td></tr>";
-                    }
-                    ?>
-                </tbody>
-            </table>
+                ?>
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead class="table-dark">
+                            <tr>
+                                <th>ID</th>
+                                <th>Producto</th>
+                                <th>Categoría</th>
+                                <th>Precio</th>
+                                <th>Stock</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <?php
+                            if(mysqli_num_rows($resultado) > 0) {
+                                while($p = mysqli_fetch_assoc($resultado)) {
+                                    echo "<tr>
+                                            <td>" . str_pad($p['id'], 3, '0', STR_PAD_LEFT) . "</td>
+                                            <td>" . htmlspecialchars($p['nombre']) . "</td>
+                                            <td>" . htmlspecialchars($p['categoria']) . "</td>
+                                            <td>$" . number_format($p['precio'], 2) . "</td>
+                                            <td>" . $p['stock'] . " unidades</td>
+                                            <td>
+                                                <a href='modificar.php?id=" . $p['id'] . "' class='btn btn-warning btn-sm'>Modificar</a>
+                                                <a href='eliminar.php?id=" . $p['id'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Eliminar?\")'>Eliminar</a>
+                                            </td>
+                                          </tr>";
+                                }
+                            } else {
+                                echo "<tr><td colspan='6' class='text-center'>No hay productos</td></tr>";
+                            }
+                            ?>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
-<?php
-// Cerrar conexión
-mysqli_close($conexion);
-?>
+<?php mysqli_close($conexion); ?>

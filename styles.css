@@ -7,20 +7,23 @@
 body {
     font-family: Arial, sans-serif;
     background: #f5f5f5;
-    padding: 20px;
 }
 
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    background: white;
-    border: 1px solid #ddd;
-}
-
-header {
+/* Menú superior */
+.navbar {
     background: #333;
     color: white;
-    padding: 20px;
+    padding: 15px 0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.navbar-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -28,15 +31,33 @@ header {
     gap: 15px;
 }
 
-h1 {
+.brand {
     font-size: 24px;
+    font-weight: bold;
+    margin: 0;
 }
 
-.header-buttons {
+.navbar-buttons {
     display: flex;
     gap: 10px;
+    margin-left: auto;
 }
 
+/* Contenedor principal */
+.container {
+    max-width: 1400px;
+    margin: 30px auto;
+    padding: 0 20px;
+}
+
+.content {
+    background: white;
+    padding: 30px;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+/* Botones */
 .btn {
     padding: 10px 20px;
     border: none;
@@ -51,19 +72,24 @@ h1 {
     color: white;
 }
 
+.btn-agregar:hover {
+    background: #218838;
+}
+
 .btn-disponibles {
     background: #007bff;
     color: white;
 }
 
-.content {
-    padding: 20px;
+.btn-disponibles:hover {
+    background: #0069d9;
 }
 
+/* Tabla */
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 10px;
+    margin-top: 20px;
 }
 
 th, td {
@@ -81,6 +107,7 @@ tbody tr:hover {
     background: #f9f9f9;
 }
 
+/* Botones de acción */
 .action-buttons {
     display: flex;
     gap: 5px;
@@ -96,6 +123,10 @@ tbody tr:hover {
     text-decoration: none;
 }
 
+.btn-modificar:hover {
+    background: #e0a800;
+}
+
 .btn-eliminar {
     background: #dc3545;
     color: white;
@@ -106,9 +137,14 @@ tbody tr:hover {
     text-decoration: none;
 }
 
+.btn-eliminar:hover {
+    background: #c82333;
+}
+
+/* Mensajes */
 .mensaje {
     padding: 10px;
-    margin-bottom: 10px;
+    margin-bottom: 20px;
     border-radius: 5px;
 }
 
@@ -124,9 +160,25 @@ tbody tr:hover {
     border: 1px solid #f5c6cb;
 }
 
+/* Responsive */
 @media (max-width: 768px) {
-    header {
+    .navbar-content {
         flex-direction: column;
+        text-align: center;
+    }
+
+    .navbar-buttons {
+        justify-content: center;
+        width: 100%;
+        margin-left: 0;
+    }
+
+    .container {
+        margin: 20px auto;
+    }
+
+    .content {
+        padding: 15px;
     }
 
     table {
