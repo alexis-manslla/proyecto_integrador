@@ -4,11 +4,10 @@ $usuario = "root";
 $password = "";
 $base_datos = "gestion_productos";
 
-$conexion = mysqli_connect($servidor, $usuario, $password, $base_datos);
-
-if (!$conexion) {
-    die("Error de conexión: " . mysqli_connect_error());
+try {
+    $conexion = new PDO("mysql:host=$servidor;dbname=$base_datos;charset=utf8", $usuario, $password);
+    $conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+} catch(PDOException $e) {
+    die("Error de conexión: " . $e->getMessage());
 }
-
-mysqli_set_charset($conexion, "utf8");
 ?>

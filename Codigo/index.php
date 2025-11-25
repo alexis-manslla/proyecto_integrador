@@ -1,6 +1,8 @@
 <?php
 include 'conexion.php';
-$resultado = mysqli_query($conexion, "SELECT * FROM productos ORDER BY id ASC");
+$stmt = $conexion->prepare("SELECT * FROM productos ORDER BY id ASC");
+$stmt->execute();
+$productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -22,14 +24,14 @@ $resultado = mysqli_query($conexion, "SELECT * FROM productos ORDER BY id ASC");
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="index.php">TechnoMarket</a>
-            <a class="btn btn-success btn-agregar-nav" href="agregar_productos.php">Agregar</a>
+            <a class="navbar-brand" href="http://localhost/proyecto_integrador/Codigo/index.php">TechnoMarket</a>
+            <a class="btn btn-success btn-agregar-nav" href="http://localhost/proyecto_integrador/Codigo/crear.php">Agregar</a>
         </div>
     </nav>
 
     <div class="container mt-4">
         <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
+            <div class="card-header">
                 <h4 class="mb-0">Listado de Productos</h4>
             </div>
             <div class="card-body">
@@ -37,8 +39,8 @@ $resultado = mysqli_query($conexion, "SELECT * FROM productos ORDER BY id ASC");
                     <table class="table table-striped table-hover">
                         <thead class="table-dark">
                             <tr>
-                                <th>N°prod</th>
-                                <th>Producto</th>
+                                <th>ID</th>
+                                <th>Nombre</th>
                                 <th>Categoría</th>
                                 <th>Precio</th>
                                 <th>Stock</th>
@@ -47,8 +49,8 @@ $resultado = mysqli_query($conexion, "SELECT * FROM productos ORDER BY id ASC");
                         </thead>
                         <tbody>
                             <?php
-                            if(mysqli_num_rows($resultado) > 0) {
-                                while($p = mysqli_fetch_assoc($resultado)) {
+                            if(count($productos) > 0) {
+                                foreach($productos as $p) {
                                     echo "<tr>
                                             <td>" . str_pad($p['id'], 3, '0', STR_PAD_LEFT) . "</td>
                                             <td>" . htmlspecialchars($p['nombre']) . "</td>
@@ -56,13 +58,13 @@ $resultado = mysqli_query($conexion, "SELECT * FROM productos ORDER BY id ASC");
                                             <td>$" . number_format($p['precio'], 2) . "</td>
                                             <td>" . $p['stock'] . " unidades</td>
                                             <td>
-                                                <a href='modificar.php?id=" . $p['id'] . "' class='btn btn-warning btn-sm'>Modificar</a>
-                                                <a href='eliminar.php?id=" . $p['id'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Eliminar?\")'>Eliminar</a>
+                                                <a href='editar.php?id=" . $p['id'] . "' class='btn btn-warning btn-sm'>Editar</a>
+                                                <a href='eliminar.php?id=" . $p['id'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"¿Eliminar este producto?\")'>Eliminar</a>
                                             </td>
                                           </tr>";
                                 }
                             } else {
-                                echo "<tr><td colspan='6' class='text-center'>No hay productos</td></tr>";
+                                echo "<tr><td colspan='6' class='text-center'>No hay productos registrados</td></tr>";
                             }
                             ?>
                         </tbody>
@@ -74,4 +76,3 @@ $resultado = mysqli_query($conexion, "SELECT * FROM productos ORDER BY id ASC");
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-<?php mysqli_close($conexion); ?>
